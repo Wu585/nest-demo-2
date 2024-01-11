@@ -15,7 +15,6 @@ export class CodeController {
     res.send(captcha.data);
   }
 
-
   @Post()
   createUser(@Body() body, @Session() session) {
     console.log(body, session.code);

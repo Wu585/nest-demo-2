@@ -25,6 +25,8 @@
     "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^10.0.0",
     "express-session": "^1.17.3",
+    "https-proxy-agent": "^7.0.2",
+    "openai": "^4.24.3",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
     "svg-captcha": "^1.4.0"
