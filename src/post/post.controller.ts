@@ -1,11 +1,24 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { PostService } from './post.service';
-import { CreatePostDto } from './dto/create-post.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseFilters,
+  ForbiddenException,
+  ParseUUIDPipe
+} from "@nestjs/common";
+import { PostService } from "./post.service";
+import { CreatePostDto } from "./dto/create-post.dto";
+import { UpdatePostDto } from "./dto/update-post.dto";
+import { HttpExceptionFilter } from "../filters/http-exception.filter";
 
-@Controller('post')
+@Controller("post")
 export class PostController {
-  constructor(private readonly postService: PostService) {}
+  constructor(private readonly postService: PostService) {
+  }
 
   @Post()
   create(@Body() createPostDto: CreatePostDto) {
@@ -13,22 +26,15 @@ export class PostController {
   }
 
   @Get()
+  @UseFilters(new HttpExceptionFilter())
   findAll() {
-    return this.postService.findAll();
+    throw new ForbiddenException("未认证");
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.postService.findOne(+id);
+  @Get(":id")
+  @UseFilters(new HttpExceptionFilter())
+  findOne(@Param("id",ParseUUIDPipe) id) {
+    console.log(typeof id); // 验证出错了就执行不到
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    return this.postService.update(+id, updatePostDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.postService.remove(+id);
-  }
 }

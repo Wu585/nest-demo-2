@@ -1,8 +1,9 @@
-import {Controller, Get, Post, Body, Patch, Param, Delete} from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors } from "@nestjs/common";
 import {MessagesService} from './messages.service';
 import {CreateMessageDto} from './dto/create-message.dto';
 import {UpdateMessageDto} from './dto/update-message.dto';
 import {OpenaiService} from "../openai/openai.service";
+import { ResponseInterceptor } from "../interceptors/response.interceptor";
 
 @Controller('messages')
 export class MessagesController {
@@ -10,6 +11,7 @@ export class MessagesController {
   }
 
   @Post()
+  @UseInterceptors(ResponseInterceptor)
   async create(@Body() createMessageDto: CreateMessageDto) {
     const response = await this.openAiService.createChatCompletion([
       {role: "user", content: createMessageDto.content}
