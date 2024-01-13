@@ -1,10 +1,12 @@
-import { NestFactory } from "@nestjs/core";
-import { AppModule } from "./app.module";
+import {NestFactory} from "@nestjs/core";
+import {AppModule} from "./app.module";
 import * as session from "express-session";
-import { logger } from "./middleware/log.middleware";
-import { NestExpressApplication } from "@nestjs/platform-express";
-import { join } from "path";
-import { ResponseInterceptor } from "./interceptors/response.interceptor";
+import {logger} from "./middleware/log.middleware";
+import {NestExpressApplication} from "@nestjs/platform-express";
+import {join} from "path";
+import {ResponseInterceptor} from "./interceptors/response.interceptor";
+import {HttpExceptionFilter} from "./filters/http-exception.filter";
+import {ValidationPipe} from "@nestjs/common";
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -24,6 +26,10 @@ async function bootstrap() {
   app.use(logger);
 
   app.useGlobalInterceptors(new ResponseInterceptor())
+
+  app.useGlobalFilters(new HttpExceptionFilter())
+
+  app.useGlobalPipes(new ValidationPipe())
 
   app.enableCors();
 

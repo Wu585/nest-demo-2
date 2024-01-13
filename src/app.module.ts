@@ -9,6 +9,7 @@ import { MessagesModule } from "./messages/messages.module";
 import { TestService } from "./Test.service";
 import { ConfigModule } from "./config/config.module";
 import { UploadModule } from './upload/upload.module';
+import { LoginModule } from './login/login.module';
 
 @Module({
   imports: [
@@ -20,7 +21,8 @@ import { UploadModule } from './upload/upload.module';
     ConfigModule.forRoot({
       path: "ricky"
     }),
-    UploadModule
+    UploadModule,
+    LoginModule
   ],
   controllers: [AppController],
   providers: [
